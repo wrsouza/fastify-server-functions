@@ -8,12 +8,28 @@ export interface User {
     updatedAt: Date
 }
 
-export interface UserCreateBody {
+export interface UserRegisterBody {
     name: string
     email: string
 }
 
-export interface UserUpdateBody extends UserCreateBody {}
+export interface UserCreateRequest {
+    Body: UserRegisterBody
+}
+
+export interface UserShowRequest {
+    Params: {
+        userId: string
+    }
+}
+
+export interface UserUpdateRequest extends UserCreateRequest {
+    Params: {
+        userId: string
+    }
+}
+
+export interface UserDestroyRequest extends UserShowRequest {}
 
 const userSchema = z.object({
     id: z.string(),
@@ -24,68 +40,64 @@ const userSchema = z.object({
 })
 
 export const UserListSchema = {
-    schema: {
-        tags: ['users'],
-        description: 'List users',
-        response: {
-            200: z.array(userSchema).describe('User List')
-        }
+    tags: ['users'],
+    description: 'List users',
+    response: {
+        200: z.array(userSchema).describe('User List')
     }
 }
 
 export const UserCreateSchema = {
-    schema: {
-        tags: ['users'],
-        description: 'Create a new user',
-        body: z.object({
-            name: z.string().default('John Doe'),
-            email: z.string().email().default('john.doe@domain.com')
-        }),
-        response: {
-            201: userSchema.describe('User created')
-        }
+    tags: ['users'],
+    description: 'Create a new user',
+    body: z.object({
+        name: z.string().default('John Doe'),
+        email: z.string().email().default('john.doe@domain.com')
+    }),
+    response: {
+        201: userSchema.describe('User created')
     }
 }
 
 export const UserShowSchema = {
-    schema: {
-        tags: ['users'],
-        description: 'Show user',
-        params: z.object({
-            userId: z.string().uuid()
-        }),
-        response: {
-            200: userSchema.describe('User found')
+    tags: ['users'],
+    description: 'Show user',
+    params: z.object({
+        userId: z.string().uuid()
+    }),
+    response: {
+        200: userSchema.describe('User found')
+    },
+    security: [
+        {
+          "apiKey": []
         }
-    }
+    ]
 }
 
 export const UserUpdateSchema = {
-    schema: {
-        tags: ['users'],
-        description: 'Update user',
-        params: z.object({
-            userId: z.string().uuid()
-        }),
-        body: z.object({
-            name: z.string().default('John Doe'),
-            email: z.string().email().default('john.doe@domain.com')
-        }),
-        response: {
-            200: userSchema.describe('User updated')
-        }
+    tags: ['users'],
+    description: 'Update user',
+    params: z.object({
+        userId: z.string().uuid()
+    }),
+    body: z.object({
+        name: z.string().default('John Doe'),
+        email: z.string().email().default('john.doe@domain.com')
+    }),
+    response: {
+        200: userSchema.describe('User updated')
     }
 }
 
 export const UserDestroySchema = {
-    schema: {
-        tags: ['users'],
-        description: 'Delete user',
-        params: z.object({
-            userId: z.string().uuid()
-        }),
-        response: {
-            204: z.undefined().describe('User Removed')
-        }
+    tags: ['users'],
+    description: 'Delete user',
+    params: z.object({
+        userId: z.string().uuid()
+    }),
+    response: {
+        204: z.undefined().describe('User Removed')
     }
+    
 }

@@ -1,13 +1,13 @@
 import { randomUUID } from 'node:crypto';
-import { IUserRepository, UserRepository } from './user.repository'
-import { User, UserCreateBody, UserUpdateBody } from './user.schema';
+import { IUserRepository } from './user.repository'
+import { User, UserRegisterBody } from './user.schema';
 import { NotFoundError, ValidationError } from '../../common/errors';
 
 export interface IUserService {
     list: () => Promise<User[]>,
-    create: (body: UserCreateBody) => Promise<User>
+    create: (body: UserRegisterBody) => Promise<User>
     show: (id: string) => Promise<User>
-    update: (id: string, body: UserUpdateBody) => Promise<User>
+    update: (id: string, body: UserRegisterBody) => Promise<User>
     destroy: (id: string) => Promise<void>
 }
 
@@ -17,13 +17,13 @@ export function UserService(repository: IUserRepository): IUserService {
         return repository.list()
     }
 
-    async function create({ name, email }: UserCreateBody) {
+    async function create({ name, email }: UserRegisterBody) {
         const user = await repository.find('email', email)
         if (user) {
             throw new ValidationError('E-mail already exist');
         }
         const datetime = new Date()
-        const newUser = {
+        const newUser: User = {
             id: randomUUID(),
             name,
             email,
@@ -42,7 +42,7 @@ export function UserService(repository: IUserRepository): IUserService {
         return user
     }
 
-    async function update(id: string, { name, email }: UserUpdateBody) {
+    async function update(id: string, { name, email }: UserRegisterBody) {
         const user = await repository.find('id', id)
         if (!user) {
             throw new NotFoundError('User not exists');
