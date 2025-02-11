@@ -7,7 +7,7 @@ import { routes } from './routes'
 import { exceptionHandler } from './common/exceptions'
 import { fastifyHelmet } from '@fastify/helmet'
 
-const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>()
+const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)

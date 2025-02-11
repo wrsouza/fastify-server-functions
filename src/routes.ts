@@ -3,7 +3,7 @@ import { UsersRoutes } from './modules/users/user.routes';
 import { FastifyInstance, onRequestHookHandler } from "fastify";
 
 export async function routes(app: FastifyInstance) {
-    app.register(AuthRoutes)
+    /*
     app.addHook('onRequest', (request, reply, done) => {
         const { authorization } = request.headers
         if (!authorization) {
@@ -11,5 +11,6 @@ export async function routes(app: FastifyInstance) {
         }
         done()
     })
-    app.register(UsersRoutes)
+    */
+    app.register(UsersRoutes, { prefix: 'api/users' })
 }

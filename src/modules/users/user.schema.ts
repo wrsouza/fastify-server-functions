@@ -67,12 +67,7 @@ export const UserShowSchema = {
     }),
     response: {
         200: userSchema.describe('User found')
-    },
-    security: [
-        {
-          "apiKey": []
-        }
-    ]
+    }
 }
 
 export const UserUpdateSchema = {
@@ -99,5 +94,4 @@ export const UserDestroySchema = {
     response: {
         204: z.undefined().describe('User Removed')
     }
-    
 }
